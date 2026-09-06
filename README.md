@@ -1,7 +1,7 @@
 # YJ Store
 
 **LIVE DEMO**  
-Link URL : https://illustrious-travesseiro-d6bcb7.netlify.app
+Link URL : https://yuejue.store
 
 ## Latar Belakang
 
