@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="YJ Store - Pilihan Terbaik Hari Ini, Belanja Online Mudah dan Terpercaya">
+  <title>YJ Store</title>
+  <link rel="icon" type="image/png" href="assets/logo_dark.png">
+  <link rel="apple-touch-icon" href="assets/logo_dark.png">
+  <link rel="stylesheet" href="styles.css?v=1.05">
+  <link rel="preconnect" href="https://api.unsplash.com">
+  <link rel="preconnect" href="https://serpapi.com">
+</head>
+<body>
+
+  <!-- NAVBAR UTAMA -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      
+      <!-- LOGO & DROPDOWN -->
+      <div class="brand-logo-container">
+        <button id="logoBtn" class="brand-logo-btn" aria-label="Menu Utama">
+          <img id="mainLogo" src="assets/logo_dark.png" alt="YJ Store Logo" class="logo-img">
+          <span id="logoCartBadge" class="logo-cart-badge" aria-label="Jumlah item dalam keranjang" hidden></span>
+        </button>
+
+        <div id="logoDropdown" class="logo-dropdown">
+          <a href="#" class="dropdown-item active">
+            <span class="item-icon">🏠</span> <span data-i18n="menuHome">Beranda</span>
+          </a>
+          <a href="#" id="cartDropdownBtn" class="dropdown-item">
+            <span class="item-icon">🛒</span> 
+            <span data-i18n="menuCart">Keranjang</span>
+            <span id="dropdownCartBadge" class="cart-badge dropdown-cart-badge" style="margin-left: auto;" hidden>0</span>
+          </a>
+          
+          <div class="dropdown-divider"></div>
+
+          <a href="#" id="changeLangDropdownBtn" class="dropdown-item">
+            <span class="item-icon">🌐</span> <span data-i18n="menuChangeLang">Ganti Bahasa</span>
+          </a>
+
+          <a href="#" id="changeRegionDropdownBtn" class="dropdown-item">
+            <span class="item-icon">📍</span> <span data-i18n="menuChangeRegion">Pilih Negara / Wilayah</span>
+          </a>
+
+          <a href="#" id="settingsDropdownBtn" class="dropdown-item">
+            <span class="item-icon">⚙️</span> <span data-i18n="menuSettings">Pengaturan</span>
+          </a>
+
+          <a href="#" id="aboutDropdownBtn" class="dropdown-item">
+            <span class="item-icon">ℹ️</span> <span data-i18n="menuAbout">Tentang Kami</span>
+          </a>
+
+          <div class="dropdown-divider"></div>
+
+          <div class="dropdown-theme-bottom">
+            <div class="theme-switch-wrapper">
+              <img src="assets/dark.png" alt="Dark Mode" class="theme-icon">
+              <label class="theme-switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+              </label>
+              <img src="assets/light.png" alt="Light Mode" class="theme-icon">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="search-section">
+        <div class="search-box" id="searchBoxContainer">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Cari produk, merek, atau kategori..." autocomplete="off">
+          
+          <!-- Dropdown Riwayat Pencarian -->
+          <div class="search-history-dropdown"></div>
+
+          <button id="clearSearchBtn" class="clear-btn" aria-label="Bersihkan pencarian">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+          <div class="search-divider"></div>
+          <button id="searchBtn" class="search-btn" aria-label="Cari">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- TOMBOL AI ASSISTANT -->
+      <div class="nav-links">
+        <button id="aiAssistantBtn" class="ai-nav-trigger" aria-label="Tanya AI Asisten">
+          <span class="ai-icon">🤖</span>
+          <span class="ai-text" data-i18n="aiButtonLabel">Tanya AI</span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- KONTEN UTAMA -->
+  <main class="main-container">
+    
+    <!-- 1. KONTEN BERANDA (HOME VIEW) -->
+    <div id="searchResultsView" class="search-results-view" aria-live="polite">
+      <section class="search-results-section">
+        <div class="section-title search-results-header">
+          <h3 data-i18n="searchResultsTitle">Hasil Pencarian</h3>
+          <p id="searchResultsMeta" data-i18n="searchResultsMeta">Produk yang cocok dengan pencarian Anda.</p>
+        </div>
+        <div id="searchResultsGrid" class="product-grid search-results-grid"></div>
+        <div id="searchScrollLoader" class="doom-scroll-loader" hidden>
+          <div class="doom-spinner"></div>
+        </div>
+        <div id="searchScrollEnd" class="doom-scroll-end" hidden></div>
+      </section>
+    </div>
+
+    <div id="homePageView" class="home-page-view">
+      
+      <!-- BANNER HERO INTERAKTIF -->
+      <section class="hero-banner" id="heroBanner">
+        <div class="banner-overlay-shine"></div>
+        <div class="banner-content">
+          <span class="banner-tag">FLASH SALE 2026</span>
+          <h2 data-i18n="bannerTitle">Pilihan Terbaik Hari Ini</h2>
+          <p data-i18n="bannerSub">Produk Berkualitas Tinggi Langsung Dalam Satu Klik</p>
+          <button class="banner-cta-btn" id="bannerCtaBtn">
+            <span data-i18n="bannerCta">Jelajahi Promo</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="cta-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="banner-graphic">
+          <div class="graphic-circle c1"></div>
+          <div class="graphic-circle c2"></div>
+        </div>
+      </section>
+
+      <!-- SECTION KATEGORI -->
+      <section class="category-section">
+        
+        <!-- KOTAK KATEGORI UTAMA -->
+        <div class="category-card category-card-box" style="grid-column: 1 / -1;">
+          <div class="category-panel category-panel-left">
+            <div class="category-row-top">
+            <div class="cat-item" data-category-search="elektronik">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/phone1.png" alt="Elektronik 1" class="cat-slide-img active">
+                <img src="assets/phone2.png" alt="Elektronik 2" class="cat-slide-img">
+                <img src="assets/phone3.png" alt="Elektronik 3" class="cat-slide-img">
+                <img src="assets/laptop1.png" alt="Elektronik 4" class="cat-slide-img">
+                <img src="assets/powerbank1.png" alt="Elektronik 5" class="cat-slide-img">
+              </div>
+              <span data-i18n="catElectronics">Elektronik</span>
+            </div>
+
+            <div class="cat-item" data-category-search="peralatan rumah tangga">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/home1.png" class="cat-slide-img active" alt="Peralatan Rumah Tangga">
+                <img src="assets/home2.png" class="cat-slide-img" alt="Peralatan Rumah Tangga">
+              </div>
+              <span data-i18n="catAppliances">Peralatan Rumah Tangga</span>
+            </div>
+
+            <div class="cat-item" data-category-search="aksesoris">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/Accessories1.png" class="cat-slide-img active" alt="Aksesoris">
+                <img src="assets/Accessories2.png" class="cat-slide-img" alt="Aksesoris">
+              </div>
+              <span data-i18n="catAccessories">Aksesoris</span>
+            </div>
+
+            <div class="cat-item" data-category-search="kecantikan">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/kecatikan1.png" class="cat-slide-img active" alt="Kecantikan">
+                <img src="assets/kecantikan2.png" class="cat-slide-img" alt="Kecantikan">
+              </div>
+              <span data-i18n="catKecantikan">Kecantikan</span>
+            </div>
+          </div>
+
+            <div class="category-divider-line"></div>
+
+            <div class="category-row-bottom">
+            <div class="cat-item" data-category-search="sanitasi">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/bersih.png" class="cat-slide-img active" alt="Sanitasi Dan Perawatan Diri">
+              </div>
+              <span data-i18n="catCleaners">Sanitasi Dan Perawatan Diri</span>
+            </div>
+
+            <div class="cat-item" data-category-search="alat tulis kantor">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/ATK1.png" class="cat-slide-img active" alt="Alat Tulis Kantor">
+              </div>
+              <span data-i18n="catStationery">Alat Tulis Kantor</span>
+            </div>
+
+            <div class="cat-item" data-category-search="kesehatan">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/obat.png" class="cat-slide-img active" alt="Kesehatan">
+              </div>
+              <span data-i18n="catHealth">Kesehatan</span>
+            </div>
+
+            <div class="cat-item" data-category-search="peralatan masak">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/utensils.png" class="cat-slide-img active" alt="peralatan masak">
+              </div>
+              <span data-i18n="catUtensils">peralatan masak</span>
+            </div>
+            </div>
+          </div>
+
+          <div class="category-panel category-panel-right">
+            <div class="category-row-top">
+
+            <div class="cat-item" data-category-search="fashion">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/fashion.png" class="cat-slide-img active" alt="fashion">
+              </div>
+              <span data-i18n="catF">Fashion</span>
+            </div>
+            <div class="cat-item" data-category-search="buku">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/books.png" class="cat-slide-img active" alt="Buku">
+              </div>
+              <span data-i18n="catBuku">Buku</span>
+            </div>
+            <div class="cat-item" data-category-search="snack">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/snacknobg.png" class="cat-slide-img active" alt="Snack">
+              </div>
+              <span data-i18n="catSnack">Snack</span>
+            </div>
+            <div class="cat-item" data-category-search="oleh oleh">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/Oleh.png" class="cat-slide-img active" alt="Oleh-Oleh">
+              </div>
+              <span data-i18n="oleh">Buku & Komik</span>
+            </div>
+            </div>
+
+            <div class="category-divider-line"></div>
+
+            <div class="category-row-bottom">
+            <div class="cat-item" data-category-search="tas">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/tas.png" class="cat-slide-img active" alt="Tas">
+              </div>
+              <span data-i18n="tas">Tas</span>
+            </div>
+            <div class="cat-item" data-category-search="sepatu">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/foot.png" class="cat-slide-img active" alt="Footwear">
+              </div>
+              <span data-i18n="foot">Alas kaki</span>
+            </div>
+            <div class="cat-item" data-category-search="tempat tidur">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/bed.png" class="cat-slide-img active" alt="Bedding">
+              </div>
+              <span data-i18n="bed">Perlengkapan tempat tidur</span>
+            </div>
+            <div class="cat-item" data-category-search="game">
+              <div class="cat-icon cat-icon-slider">
+                <img src="assets/game.png" class="cat-slide-img active" alt="games">
+              </div>
+              <span data-i18n="games">Game</span>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SECTION REKOMENDASI PRODUK -->
+      <section class="recommend-section">
+        <div class="section-title">
+          <h3 data-i18n="recommendTitle">Pilihan Terbaik Hari Ini</h3>
+        </div>
+        <div class="product-grid" id="homeRecommendGrid">
+          <!-- placeholder cards rendered by JS -->
+        </div>
+        <div id="recommendScrollLoader" class="doom-scroll-loader" hidden>
+          <div class="doom-spinner"></div>
+        </div>
+        <div id="recommendScrollEnd" class="doom-scroll-end" hidden></div>
+      </section>
+
+    </div> <!-- AKHIR HOME VIEW -->
+
+
+    <!-- 2. KONTEN KERANJANG BELANJA (CART VIEW) -->
+    <div id="cartPageView" class="cart-page-view" aria-live="polite">
+      <div class="cart-container">
+        
+        <div class="cart-header-row">
+          <div class="cart-header-left">
+            <h2 data-i18n="cartTitle">Keranjang Belanja</h2>
+            <p id="cartItemsSubtitle" class="cart-subtitle"><span id="cartTotalItemsCount">0</span> <span data-i18n="itemsCount">item dalam keranjang</span></p>
+          </div>
+          <button id="clearCartBtn" class="cart-clear-btn" data-i18n="clearCartBtn" style="display: none;">
+            🗑️ Kosongkan Keranjang
+          </button>
+        </div>
+
+        <div class="cart-content-layout">
+          <!-- DAFTAR ITEM KERANJANG -->
+          <div class="cart-items-column" id="cartItemsContainer">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- SUMMARY KERANJANG -->
+          <div class="cart-summary-column" id="cartSummaryColumn">
+            <div class="cart-summary-card">
+              <h3 data-i18n="orderSummary">Ringkasan Belanja</h3>
+              
+              <div class="summary-line">
+                <span data-i18n="subtotal">Subtotal</span>
+                <span id="cartSubtotalVal" class="summary-val">Rp 0</span>
+              </div>
+              
+              <div class="summary-line">
+                <span data-i18n="shipping">Pengiriman</span>
+                <span class="summary-val shipping-unknown" data-i18n="shippingUnknown">Tidak Diketahui</span>
+              </div>
+
+              <div class="summary-divider"></div>
+
+              <div class="summary-line total-line">
+                <span data-i18n="totalPrice">Total Harga</span>
+                <span id="cartTotalVal" class="summary-total-val">Rp 0</span>
+              </div>
+
+              <button id="cartCheckoutBtn" class="cart-continue-btn" type="button" disabled aria-disabled="true" title="Checkout (Work in Progress)" style="opacity: 0.7; cursor: not-allowed;">
+                Checkout (Work in Progress)
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- AKHIR CART VIEW -->
+
+  </main>
+
+  <!-- MODAL BAHASA -->
+  <div id="languageModal" class="lang-modal-overlay">
+    <div class="lang-modal-content">
+      <h2 id="modalLangTitle" data-i18n="modalLangTitle">Pilih Bahasa Anda</h2>
+      <p id="modalLangSub" data-i18n="modalLangSub">Pilih bahasa tampilan web yang Anda inginkan.</p>
+
+      <div class="lang-options">
+        <label class="lang-option">
+          <input type="radio" name="modalLang" value="id" checked>
+          <span class="flag">🇮🇩</span>
+          <span class="label">Bahasa Indonesia</span>
+        </label>
+        
+        <label class="lang-option">
+          <input type="radio" name="modalLang" value="en">
+          <span class="flag">🇬🇧</span>
+          <span class="label">English</span>
+        </label>
+
+        <label class="lang-option">
+          <input type="radio" name="modalLang" value="ms">
+          <span class="flag">🇲🇾</span>
+          <span class="label">Bahasa Melayu</span>
+        </label>
+
+        <label class="lang-option">
+          <input type="radio" name="modalLang" value="zh">
+          <span class="flag">🇨🇳</span>
+          <span class="label">简体中文</span>
+        </label>
+      </div>
+
+      <button id="modalLangContinueBtn" class="modal-continue-btn" data-i18n="continueBtn">Lanjutkan</button>
+    </div>
+  </div>
+
+  <!-- MODAL REGION -->
+  <div id="regionModal" class="lang-modal-overlay">
+    <div class="lang-modal-content">
+      <h2 id="modalRegionTitle" data-i18n="modalRegionTitle">Mana Negara / Wilayah Anda?</h2>
+      <p id="modalRegionSub" data-i18n="modalRegionSub">Pilih wilayah belanja untuk penyesuaian mata uang dan opsi pengiriman.</p>
+
+      <div class="lang-options">
+        <label class="lang-option">
+          <input type="radio" name="modalRegion" value="id" checked>
+          <span class="flag">🇮🇩</span>
+          <span class="label">Indonesia (IDR - Rp)</span>
+        </label>
+        
+        <label class="lang-option">
+          <input type="radio" name="modalRegion" value="my">
+          <span class="flag">🇲🇾</span>
+          <span class="label">Malaysia (MYR - RM)</span>
+        </label>
+
+        <label class="lang-option region-disabled" aria-disabled="true">
+          <input type="radio" name="modalRegion" value="sg" disabled>
+          <span class="flag">🇸🇬</span>
+          <span class="label">Singapore (SGD - S$) - Work in Progress</span>
+        </label>
+
+        <label class="lang-option region-disabled" aria-disabled="true">
+          <input type="radio" name="modalRegion" value="cn" disabled>
+          <span class="flag">🇨🇳</span>
+          <span class="label">中国 (CNY - ¥) - Work in Progress</span>
+        </label>
+      </div>
+
+      <button id="modalRegionContinueBtn" class="modal-continue-btn" data-i18n="continueBtn">Simpan Wilayah</button>
+    </div>
+  </div>
+
+  <!-- MODAL PENGATURAN -->
+  <div id="settingsModal" class="lang-modal-overlay">
+    <div class="lang-modal-content settings-modal-box">
+      <h2 data-i18n="settingsTitle">Pengaturan</h2>
+      <p data-i18n="settingsSub">Sesuaikan preferensi pencarian dan sistem Anda.</p>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span data-i18n="settingsHistoryEnable">Aktifkan Riwayat Pencarian</span>
+          <small data-i18n="settingsHistoryDesc">Menyimpan kata kunci pencarian selamanya di perangkat ini.</small>
+        </div>
+        <label class="theme-switch">
+          <input type="checkbox" id="historyToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>🥚 Easter Egg</span>
+        </div>
+        <label class="theme-switch">
+          <input type="checkbox" id="easterEggToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-history-container" style="margin-top: 15px; margin-bottom: 20px;">
+        <button id="clearHistoryBtn" class="clear-history-action" data-i18n="settingsHistoryClear">Clear All Search History</button>
+      </div>
+
+      <button id="closeSettingsModalBtn" class="modal-continue-btn" data-i18n="closeBtn">Tutup</button>
+    </div>
+  </div>
+
+  <!-- MODAL ABOUT ME -->
+  <div id="aboutModal" class="lang-modal-overlay">
+    <div class="about-modal-content">
+      <!-- Animated background orbs -->
+      <div class="about-orb about-orb-1"></div>
+      <div class="about-orb about-orb-2"></div>
+      <div class="about-orb about-orb-3"></div>
+
+      <div class="about-header">
+        <div class="about-logo-ring">
+          <img id="aboutLogo" src="assets/logo_dark.png" alt="YJ Store" class="about-logo-img">
+        </div>
+        <h2 class="about-title">YJ Store</h2>
+        <p class="about-tagline" data-i18n="aboutTagline">Belanja Cerdas, Hidup Mudah</p>
+      </div>
+
+      <div class="about-body">
+        <p class="about-desc" data-i18n="aboutDesc">YJ Store adalah platform belanja pintar yang menghubungkan Anda dengan produk terbaik dari marketplace terpercaya di Indonesia dan Malaysia. Kami menggunakan teknologi AI untuk memberikan rekomendasi personal yang sesuai dengan kebutuhan Anda.</p>
+
+        <div class="about-features">
+          <div class="about-feature-card">
+            <span class="about-feature-icon">🤖</span>
+            <h4 data-i18n="aboutFeature1Title">AI Shopping Assistant</h4>
+            <p data-i18n="aboutFeature1Desc">Rekomendasi cerdas berdasarkan kebutuhan Anda</p>
+          </div>
+          <div class="about-feature-card">
+            <span class="about-feature-icon">🌍</span>
+            <h4 data-i18n="aboutFeature2Title">Multi-Region</h4>
+            <p data-i18n="aboutFeature2Desc">Belanja dari Indonesia dan Malaysia dalam satu tempat</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-footer">
+        <div class="about-version">Web Version 1.0</div>
+        <button id="closeAboutModalBtn" class="modal-continue-btn about-close-btn" data-i18n="closeBtn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL AI ASISTEN -->
+  <div id="aiChatPanel" class="ai-chat-panel">
+    <div class="ai-panel-header">
+      <div class="ai-header-title">
+        <span class="ai-icon">🤖</span>
+        <div>
+          <span class="ai-title-text" data-i18n="aiChatTitle">YJ Store AI V1.05</span>
+          <span class="ai-status-badge">Online</span>
+        </div>
+      </div>
+      <div class="ai-header-actions">
+        <button id="clearAiChatBtn" class="ai-header-btn" title="Bersihkan Chat" aria-label="Bersihkan Chat">🗑️</button>
+        <button id="closeAiPanelBtn" class="ai-close-btn" aria-label="Tutup AI">&times;</button>
+      </div>
+    </div>
+   
+    <div class="ai-panel-body">
+      <div class="ai-chat-messages" id="aiChatMessages">
+        <div class="ai-message assistant">
+          <div class="ai-msg-avatar">🤖</div>
+          <div class="ai-msg-content" data-i18n="aiGreeting">
+            Halo! Saya asisten belanja pintar YJ Store. Tanyakan rekomendasi barang, perbandingan harga, atau cari promo terbaik hari ini!
+          </div>
+        </div>
+      </div>
+      
+      <div class="ai-prompt-list" id="aiPromptList">
+        <button class="ai-prompt-chip" type="button" data-i18n="aiChipPhone" data-prompt-key="aiPromptPhone" data-ai-prompt="Rekomendasikan smartphone terbaik bergaransi resmi toko official">📱 Rekomendasi HP</button>
+        <button class="ai-prompt-chip" type="button" data-i18n="aiChipShoes" data-prompt-key="aiPromptShoes" data-ai-prompt="Cari rekomendasi sepatu lari running yang nyaman dan awet">👟 Sepatu Running</button>
+        <button class="ai-prompt-chip" type="button" data-i18n="aiChipHealth" data-prompt-key="aiPromptHealth" data-ai-prompt="Rekomendasi obat batuk dan suplemen daya tahan tubuh resmi">💊 Promo Kesehatan</button>
+        <button class="ai-prompt-chip" type="button" data-i18n="aiChipLaptop" data-prompt-key="aiPromptLaptop" data-ai-prompt="Rekomendasi laptop terbaik untuk kerja dan kuliah">💻 Laptop Kuliah</button>
+      </div>
+
+      <form id="aiChatInputForm" class="ai-chat-input-row">
+        <div class="ai-input-pill-wrapper">
+          <input type="text" id="aiUserInput" class="ai-chat-input" placeholder="Tanya AI seputar produk..." autocomplete="off">
+          <button type="submit" id="aiSendBtn" class="ai-send-btn" aria-label="Kirim Pesan">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOM MODAL KONFIRMASI HAPUS RIWAYAT -->
+  <div id="confirmClearModal" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <h3 id="confirmModalTitle" data-i18n="settingsHistoryClear">Hapus Semua Search History</h3>
+      <p id="confirmModalDesc" data-i18n="confirmClearHistory">Yakin ingin menghapus seluruh riwayat pencarian? Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="custom-modal-actions">
+        <button type="button" id="cancelClearBtn" class="modal-btn btn-cancel" data-i18n="cancelBtn">Batal</button>
+        <button type="button" id="confirmClearBtn" class="modal-btn btn-clear" data-i18n="clearBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DETAIL PRODUK -->
+  <div id="productDetailModal" class="product-modal-overlay" aria-hidden="true">
+    <div class="product-modal-card">
+      <button id="closeProductModalBtn" class="product-modal-close" aria-label="Tutup Detail">&times;</button>
+      <div class="product-modal-body" id="productModalBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKASI -->
+  <div id="cartToast" class="cart-toast">
+    <span class="toast-icon">🛒</span>
+    <span id="cartToastMsg">Barang berhasil ditambahkan ke keranjang!</span>
+  </div>
+
+  <script src="app.js?v=1.05" defer></script>
+</body>
+</html>

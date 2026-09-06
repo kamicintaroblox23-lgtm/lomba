@@ -1,0 +1,23 @@
+{
+  "name": "project-mi-kocok",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "node --check public/app.js && node --check server/server.js",
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.19.0",
+    "dotenv": "^17.4.2",
+    "googleapis": "^174.0.1",
+    "playwright": "^1.62.1"
+  }
+}

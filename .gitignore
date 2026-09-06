@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.cache/
+npm-debug.log*
+*.log
+.vscode/
+playwright-report/
+test-results/
+WeDevelopment Guidebook (SMASMK) ITechnoCup 2026 (2).pdf
