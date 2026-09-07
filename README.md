@@ -104,7 +104,7 @@ YJ Store tidak hanya dilengkapi fitur-fitur yang menjadi jembatan utama bagi pem
 
 **DEMO & SCREENSHOT**  
 **LIVE DEMO**  
-Link URL : https://illustrious-travesseiro-d6bcb7.netlify.app
+Link URL : https://yuejue.store/
 
 <img width="1470" height="956" alt="Tangkapan Layar 2026-08-15 pukul 15 15 02" src="https://github.com/user-attachments/assets/68af1e76-f3a6-4b8d-aa85-f5264fbf7c13" />
 
