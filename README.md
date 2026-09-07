@@ -109,10 +109,10 @@ Link URL : https://yuejue.store/
 <img width="1470" height="956" alt="Tangkapan Layar 2026-08-15 pukul 15 15 02" src="https://github.com/user-attachments/assets/68af1e76-f3a6-4b8d-aa85-f5264fbf7c13" />
 
 
-<img width="1600" height="769" alt="image" src="https://github.com/user-attachments/assets/b51fa224-83dc-4073-807e-b2cd7c6395ac" />
+Tampilan Utama Aplikasi<img width="1600" height="769" alt="image" src="https://github.com/user-attachments/assets/b51fa224-83dc-4073-807e-b2cd7c6395ac" />
 
 
-<img width="658" height="657" alt="image" src="https://github.com/user-attachments/assets/6d4cfe27-4ff2-4819-9769-52ad09ad0bee" />
+Panel Kontrol pengguna<img width="658" height="657" alt="image" src="https://github.com/user-attachments/assets/6d4cfe27-4ff2-4819-9769-52ad09ad0bee" />
 
 
 <img width="782" height="906" alt="image" src="https://github.com/user-attachments/assets/a3757cf8-6868-4f3c-85b8-d6f4ae7f8c67" />
